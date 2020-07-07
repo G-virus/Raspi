@@ -67,7 +67,7 @@ dtoverlay=gpio-ir,gpio_pin=18
 dtoverlay=gpio-ir-tx,gpio_pin=17
 ```
 17是发射端,18是接收端.
-###完成设置
+### 完成设置
 lirc0表示发送端也就是17,lirc1表示接收端,接收学习信号.
 暂时设置成lirc1接收模式
 ```shell
@@ -84,7 +84,7 @@ sudo apt install -y lirc
 ```shell
 reboot
 ```
-###测试接收器是否正常
+测试接收器是否正常
 关闭服务
 ```shell
 sudo systemctl stop lircd
@@ -107,7 +107,7 @@ space 595
 ```
 说明接收器功能正常,如果不正常可能是配置错误,遥控器问题,也可能接收器元器件损坏.
 
-### 录入红外数据
+## 录入红外数据
 经过我的测试,一般的空调遥控器在按下一个按钮后,会将此时遥控器上的空调整体信息一并发送给空调(包括此时的温度,模式,风速等等),也就是说一个"数据包"包含着一个"场景".
 
 这样看来是弊大于利,很适合语音控制.
@@ -116,7 +116,7 @@ space 595
 
 确保此时的/etc/lirc/lirc_options.conf里面是lirc1,并且关闭了lircd服务.
 
-#### 格式
+### 格式
 第一种方法是用我的模板,先创建一个名称为oo的遥控器(目前发现好像一个遥控器只能存放8个场景,具体情况未知)
 ```shell
 sudo touch /etc/lirc/lircd.conf.d/oo.lircd.conf
@@ -174,7 +174,7 @@ irrecord -d /dev/lirc1/ /etc/lirc/lircd.conf.d/ --disable-namespace
 ```
 进入自助服务,根据提示最后会在/etc/lirc/lircd.conf.d/找到此文件,如果名称不对,改成xx.lircd.conf的形式,xx为名
 字,然后缺数值的地方改成上面的数字.
-#### 录入
+### 录入
 在有了格式之后,需要替换上面绿色的数字,这个就是红外包含的信息.依然是lirc1,并且关闭了lircd服务
 ```shell
 mode2 -m -d /dev/lirc1
@@ -202,7 +202,7 @@ mode2 -m -d /dev/lirc1
 
 ![oo.png](https://github.com/G-virus/Raspi/blob/master/images/oo.png?raw=true "oo.png")
 
-### 发射测试
+## 发射测试
 切换到红外发射器
 ```shell
 sudo vim etc/lirc/lirc_options.conf
@@ -221,7 +221,7 @@ irsend LIST oo ""
 ```shell
 irsend SEND_ONCE oo off_1
 ```
-### 优化
+## 优化
 理论上一次发射信号空调就可以收到,但是不确定是红外参数不匹配还是什么原因,有时候总会有丢包,所以我就憨憨的用多次录入,多次发送解决这种情况发生...并且制作了个Python脚本.
 ```shell
 vim /home/pi/Documents/remote.py
@@ -266,13 +266,13 @@ ifconfig
 或者
 推荐使用内外穿透,b站看个视频教学几个小时就可以搞定,云服务器最便宜的最低配置也可以用,这样可以使遥控空调的价值最大化.
 
-### IPhone自动化
+## IPhone自动化
 打开iPhone,在快捷指令中添加自动化,依次选择 当到达 执行 通过SSH运行脚本,再选取距离家多少米的位置执行.输入树莓派的ip 密码等等.
 之后在健身完(shangban)回家之前可以自动开启空调,妈妈再也不会担心我回来热的满头大汉浑身难受了.
 ![auto1.png](https://github.com/G-virus/Raspi/blob/master/images/auto1.png?raw=true "auto1.png")
 ![auto2.png](https://github.com/G-virus/Raspi/blob/master/images/auto2.png?raw=true "auto2.png")
 ![auto3.png](https://github.com/G-virus/Raspi/blob/master/images/auto3.png?raw=true "auto3.png")
-### Siri控制
+## Siri控制
 只需要快捷指令添加SSH脚本,内容和上述一样,只不过Siri很呆,不仅反应迟钝而且多一个少一个字都识别不了,以后弄了HA什么Homekit再说.
 ![siri.png](https://github.com/G-virus/Raspi/blob/master/images/siri.PNG?raw=true "siri.png")
 
